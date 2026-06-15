@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>para ti</title>
+<style>
+  :root {
+    --cream: #fdf6f0;
+    --rose: #e8a0a8;
+    --rose-deep: #c97b8a;
+    --plum: #4a2e3a;
+    --gold: #d4a574;
+    --ink: #3a2a30;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  @font-face {
+    font-family: 'serif-display';
+  }
+
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: -20%;
+    left: -10%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, rgba(232,160,168,0.25), transparent 70%);
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -15%;
+    right: -10%;
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(circle, rgba(212,165,116,0.2), transparent 70%);
+    pointer-events: none;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 480px;
+    background: #fffdfb;
+    border-radius: 24px;
+    padding: 48px 36px;
+    box-shadow: 0 20px 60px rgba(74,46,58,0.12);
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(212,165,116,0.2);
+  }
+
+  .progress {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 32px;
+    justify-content: center;
+  }
+
+  .progress span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(212,165,116,0.25);
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  .progress span.active {
+    background: var(--rose-deep);
+    transform: scale(1.3);
+  }
+
+  .progress span.done {
+    background: var(--gold);
+  }
+
+  .step {
+    display: none;
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  .step.active {
+    display: block;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .eyebrow {
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--rose-deep);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 1.7rem;
+    font-weight: 400;
+    line-height: 1.4;
+    text-align: center;
+    color: var(--plum);
+    margin-bottom: 28px;
+  }
+
+  .intro-deco {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .options button {
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 16px 20px;
+    border: 1.5px solid rgba(212,165,116,0.35);
+    border-radius: 14px;
+    background: var(--cream);
+    color: var(--ink);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+  }
+
+  .options button:hover {
+    border-color: var(--rose-deep);
+    background: #fff;
+    transform: translateX(4px);
+  }
+
+  .options button:active {
+    transform: scale(0.98);
+  }
+
+  .start-btn, .restart-btn {
+    display: block;
+    width: 100%;
+    font-family: inherit;
+    font-size: 1.05rem;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    background: var(--rose-deep);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    margin-top: 8px;
+  }
+
+  .start-btn:hover, .restart-btn:hover {
+    background: var(--plum);
+    transform: translateY(-2px);
+  }
+
+  .message-box {
+    background: linear-gradient(135deg, rgba(232,160,168,0.12), rgba(212,165,116,0.1));
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 20px;
+    border-left: 3px solid var(--rose-deep);
+  }
+
+  .message-label {
+    font-style: italic;
+    font-size: 0.8rem;
+    color: var(--rose-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+
+  .message-text {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--plum);
+  }
+
+  .continue-btn {
+    display: block;
+    margin: 24px auto 0;
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 12px 28px;
+    border: 1.5px solid var(--rose-deep);
+    border-radius: 30px;
+    background: transparent;
+    color: var(--rose-deep);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .continue-btn:hover {
+    background: var(--rose-deep);
+    color: #fff;
+  }
+
+  .final-step {
+    text-align: center;
+  }
+
+  .final-deco {
+    font-size: 3rem;
+    margin-bottom: 16px;
+  }
+
+  .final-title {
+    font-size: 1.4rem;
+    color: var(--plum);
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  .letter {
+    text-align: left;
+    line-height: 1.9;
+    font-size: 1.05rem;
+    color: var(--ink);
+  }
+
+  .letter p {
+    margin-bottom: 16px;
+  }
+
+  .letter p:first-child::first-letter {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: var(--rose-deep);
+    line-height: 1;
+  }
+
+  .signature {
+    font-style: italic;
+    text-align: right;
+    color: var(--rose-deep);
+    margin-top: 24px;
+    font-size: 1.1rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .step { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="progress" id="progress"></div>
+
+  <!-- Pantalla de inicio -->
+  <div class="step active" data-step="0">
+    <div class="intro-deco">💌</div>
+    <div class="eyebrow">Una pequeña sorpresa</div>
+    <h1>Hola amor, antes de empezar… contesta esto tan rápido como puedas.</h1>
+    <button class="start-btn" onclick="nextStep()">Empezar</button>
+  </div>
+
+  <!-- Pregunta 1 -->
+  <div class="step" data-step="1">
+    <div class="eyebrow">Pregunta 1 de 4</div>
+    <h1>Si pudieras tener un superpoder por un día, ¿cuál elegirías?</h1>
+    <div class="options">
+      <button onclick="answer(1)">Volar</button>
+      <button onclick="answer(1)">Leer mentes</button>
+      <button onclick="answer(1)">Teletransportarme</button>
+      <button onclick="answer(1)">Ser invisible</button>
+    </div>
+    <div class="message-box" id="msg1" style="display:none;">
+      <div class="message-label">Para ti</div>
+      <div class="message-text">FRASE_1</div>
+    </div>
+    <button class="continue-btn" id="cont1" style="display:none;" onclick="nextStep()">Continuar →</button>
+  </div>
+
+  <!-- Pregunta 2 -->
+  <div class="step" data-step="2">
+    <div class="eyebrow">Pregunta 2 de 4</div>
+    <h1>¿Pizza con piña sí o no?</h1>
+    <div class="options">
+      <button onclick="answer(2)">Sí, totalmente</button>
+      <button onclick="answer(2)">No, jamás</button>
+      <button onclick="answer(2)">Depende del día</button>
+    </div>
+    <div class="message-box" id="msg2" style="display:none;">
+      <div class="message-label">Para ti</div>
+      <div class="message-text">FRASE_2</div>
+    </div>
+    <button class="continue-btn" id="cont2" style="display:none;" onclick="nextStep()">Continuar →</button>
+  </div>
+
+  <!-- Pregunta 3 -->
+  <div class="step" data-step="3">
+    <div class="eyebrow">Pregunta 3 de 4</div>
+    <h1>¿Qué prefieres: ver una película o salir a caminar?</h1>
+    <div class="options">
+      <button onclick="answer(3)">Ver una película</button>
+      <button onclick="answer(3)">Salir a caminar</button>
+      <button onclick="answer(3)">Las dos cosas, obvio</button>
+    </div>
+    <div class="message-box" id="msg3" style="display:none;">
+      <div class="message-label">Para ti</div>
+      <div class="message-text">FRASE_3</div>
+    </div>
+    <button class="continue-btn" id="cont3" style="display:none;" onclick="nextStep()">Continuar →</button>
+  </div>
+
+  <!-- Pregunta 4 -->
+  <div class="step" data-step="4">
+    <div class="eyebrow">Pregunta 4 de 4</div>
+    <h1>Si fueras un animal, ¿cuál serías?</h1>
+    <div class="options">
+      <button onclick="answer(4)">Un gato</button>
+      <button onclick="answer(4)">Un perro</button>
+      <button onclick="answer(4)">Un pingüino</button>
+      <button onclick="answer(4)">Otro 🐾</button>
+    </div>
+    <div class="message-box" id="msg4" style="display:none;">
+      <div class="message-label">Para ti</div>
+      <div class="message-text">FRASE_4</div>
+    </div>
+    <button class="continue-btn" id="cont4" style="display:none;" onclick="nextStep()">Continuar →</button>
+  </div>
+
+  <!-- Final -->
+  <div class="step final-step" data-step="5">
+    <div class="final-deco">💗</div>
+    <div class="final-title">Y por último...</div>
+    <div class="letter">
+      <p>FRASE_FINAL</p>
+    </div>
+    <div class="signature">— Con todo mi cariño</div>
+    <button class="restart-btn" onclick="restart()">Volver a empezar</button>
+  </div>
+
+</div>
+
+<script>
+  const totalSteps = 6; // 0 a 5
+  let current = 0;
+
+  function renderProgress() {
+    const progress = document.getElementById('progress');
+    progress.innerHTML = '';
+    // Mostramos puntos solo para los pasos 1-4 (preguntas)
+    for (let i = 1; i <= 4; i++) {
+      const dot = document.createElement('span');
+      if (i < current) dot.classList.add('done');
+      if (i === current) dot.classList.add('active');
+      progress.appendChild(dot);
+    }
+  }
+
+  function showStep(n) {
+    document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+    document.querySelector(`.step[data-step="${n}"]`).classList.add('active');
+    current = n;
+    renderProgress();
+  }
+
+  function nextStep() {
+    if (current < totalSteps - 1) {
+      showStep(current + 1);
+    }
+  }
+
+  function answer(stepNum) {
+    // Ocultar opciones, mostrar mensaje y botón continuar
+    const optionsEl = document.querySelector(`.step[data-step="${stepNum}"] .options`);
+    optionsEl.style.display = 'none';
+    document.getElementById(`msg${stepNum}`).style.display = 'block';
+    document.getElementById(`cont${stepNum}`).style.display = 'block';
+  }
+
+  function restart() {
+    // Restaurar opciones visibles
+    document.querySelectorAll('.options').forEach(el => el.style.display = 'flex');
+    document.querySelectorAll('.message-box').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.continue-btn').forEach(el => el.style.display = 'none');
+    showStep(0);
+  }
+
+  renderProgress();
+</script>
+
+</body>
+</html>
